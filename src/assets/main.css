@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Press+Start+2P&display=swap');
+
+:root {
+  --purple: #560bad;
+  --pink: #f72585;
+  --white: #ffffff;
+}
+
+body {
+  font-family: 'Press Start 2P', system-ui;
+  font-weight: 400;
+  font-style: normal;
+  background-color: var(--purple);
+}
