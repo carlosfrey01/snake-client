@@ -1,21 +1,22 @@
-import { Player } from '@/player/types'
-import type { PlayerCaching } from '@/player/types'
-import socket from '@/websocket'
 import PlayerCachingLocalStorage from '@/player/localStorage'
+import type { PlayerCaching } from '@/player/types'
+import { Player } from '@/player/types'
+import socket from '@/websocket'
 import { defineStore } from 'pinia'
 import { onMounted, Ref, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const useLandingEvents = () => {
   const registerServerEvent = (ws: WebSocket, name: String): void => {
-    ws.send(JSON.stringify({ name: 'server', action: 'register_client', payload: { name } }))
+    ws.send(JSON.stringify({ name: 'auth', action: 'register_client', payload: { name } }))
   }
 
   const reconnectServerEvent = (ws: WebSocket, caching: PlayerCaching): void => {
     const localPlayer: Player | null = caching.getPlayer()
     ws.send(
       JSON.stringify({
-        name: 'server',
-        action: 'register_client',
+        name: 'auth',
+        action: 'reconnect_client',
         payload: localPlayer,
       }),
     )
@@ -36,6 +37,7 @@ const useLandingEvents = () => {
 
 const useLandingEventHandlers = defineStore('client', () => {
   const { registerServerEvent, reconnectServerEvent, createPlayerClientEvent } = useLandingEvents()
+  const router = useRouter()
 
   const caching = new PlayerCachingLocalStorage()
   const player: Ref<Player> = ref({ name: '', id: '' })
@@ -59,6 +61,7 @@ const useLandingEventHandlers = defineStore('client', () => {
     switch (action) {
       case 'register': {
         registerServerEvent(socket, params.name)
+        router.push('/rooms')
         break
       }
 
@@ -75,6 +78,7 @@ const useLandingEventHandlers = defineStore('client', () => {
     if (playerStorage && playerStorage?.id) {
       shouldReconnect.value = true
       player.value = playerStorage
+      router.push('/rooms')
       return
     }
 

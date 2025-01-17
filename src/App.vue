@@ -1,16 +1,9 @@
 <script setup lang="ts">
-import LandingPage from '@/pages/landing-page/LandingPage.vue'
-import { onMounted } from 'vue'
-
-onMounted(() => {})
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <LandingPage />
+  <RouterView></RouterView>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-</style>
+<style scoped></style>

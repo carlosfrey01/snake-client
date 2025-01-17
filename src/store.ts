@@ -1,10 +1,15 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
-import type { Ref } from 'vue'
+import { reactive } from 'vue'
 
-export const useClientStore = defineStore('client', {
-  state: () => ({
-    player: { name: '', id: '' },
-    shouldReconnect: false,
-  }),
+export const useClientStore = defineStore('client', () => {
+  const clientState = reactive({
+    page: '/rooms',
+    current_status: 'Looking for a room...',
+    room: {
+      room_created: false,
+      is_owner: false,
+    },
+    rooms: {},
+    matches: {},
+  })
 })
